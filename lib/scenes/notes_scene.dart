@@ -2,24 +2,17 @@ import 'package:everPobre/domain/notebook.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-// En el momento en el que esta clase tiene que estar a la escucha de cambios
-// hay que pasar el Stateless a Statefull, momento en el que se crea la una nueva clase con State
+// Una clase pasa de Stateless a Statefull cuando tiene que escuchar cambios
+// Estos cambios de estado los representa una nueva clase que extiende de State
 class NotesListView extends StatefulWidget {
-  static final routeName = "/detail";
-  Notebook _model;
+  final Notebook _model;
 
-  // Constructor
   // Cuando devuelves un const el sistema se asegura que solo haya una instancia de la clase
-  //NotesListView(Notebook model) : _model = model;
-  NotesListView();
+  const NotesListView(Notebook model) : _model = model;
 
   // Al pasar la clase a Statefull se crea este constructor de la clase con State
   @override
   _NotesListViewState createState() => _NotesListViewState();
-
-  NotesListView giveMeWidget() {
-    return this;
-  }
 }
 
 class _NotesListViewState extends State<NotesListView> {
@@ -46,8 +39,6 @@ class _NotesListViewState extends State<NotesListView> {
 
   @override
   Widget build(BuildContext context) {
-    final Notebook nb = ModalRoute.of(context).settings.arguments as Notebook;
-    widget._model = nb;
     /*
      * El constructor builder crea otro build
      * itemExtent es la cantidad de cosas que quiero meter en la lista
@@ -55,11 +46,9 @@ class _NotesListViewState extends State<NotesListView> {
      * itemCount es la altura de cada celda
      */
     return ListView.builder(
-        //itemCount: widget._model.length,
-        itemCount: nb.length,
+        itemCount: widget._model.length,
         itemBuilder: (context, index) {
-          //return NoteSliver(widget._model, index);
-          return NoteSliver(nb, index);
+          return NoteSliver(widget._model, index);
         });
   }
 }
@@ -78,6 +67,7 @@ class NoteSliver extends StatefulWidget {
   _NoteSliverState createState() => _NoteSliverState();
 }
 
+// El Sliver tiene que ver realmente con la celda y su contenido
 class _NoteSliverState extends State<NoteSliver> {
   @override
   Widget build(BuildContext context) {
@@ -85,8 +75,7 @@ class _NoteSliverState extends State<NoteSliver> {
 
     return Dismissible(
       key: UniqueKey(),
-
-      // Permite arrastras una celda
+      // Permite arrastrar una celda
       onDismissed: (direction) {
         // Eliminamos la nota del widget
         widget.notebook.removeAt(widget.index);
@@ -96,6 +85,7 @@ class _NoteSliverState extends State<NoteSliver> {
           content: Text("Element ${widget.index}"),
         ));
 
+        // Avisar al modelo de que el notebook se ha eliminado
         setState(() {});
       },
       // Lo que se muestra mientras arrastras una celda que tiene onDismissed
@@ -105,7 +95,7 @@ class _NoteSliverState extends State<NoteSliver> {
       // Tarjeta con la info de la celda
       child: Card(
           child: ListTile(
-              leading: Icon(Icons.toc),
+              leading: const Icon(Icons.toc),
               title: Text(widget.notebook[widget.index].body),
               subtitle: Text(
                   fmt.format(widget.notebook[widget.index].modificationDate)))),

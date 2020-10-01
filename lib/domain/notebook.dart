@@ -17,7 +17,10 @@ class Notebook with ChangeNotifier {
   // Entero que representa el tamaño de la lista
   int get length => _notes.length;
 
-  // Constructores
+  /*
+   * Constructores
+   */
+
   Notebook();
   // Este constructor sirve para obtener una libreta llena de datos de prueba
   Notebook.testDataBuilder(String name) {
@@ -26,11 +29,18 @@ class Notebook with ChangeNotifier {
     _notes.addAll(List.generate(100, (index) => Note("Item $index")));
   }
 
-  // Accesores
+  /*
+   * Accesores
+   */
+
   // Sobrecargamos el metodo [] que devuelve una nota de un indice
   Note operator [](int index) {
     return _notes[index];
   }
+
+  /*
+   * Mutadores
+   */
 
   // Metodo para añadir notas
   void add(Note note) {
@@ -54,7 +64,10 @@ class Notebook with ChangeNotifier {
     return n;
   }
 
-  // Object Protocol
+  /*
+   * Object Protocol
+   */
+
   @override
   String toString() {
     return "<$runtimeType: $length notes>";

@@ -1,6 +1,7 @@
 import 'package:everPobre/domain/notebook.dart';
 import 'package:flutter/material.dart';
 
+// Para que el modelo avise de sus cambios se incluye "with ChangeNotifier"
 class Notebooks with ChangeNotifier {
   // Singleton de acceso a la clase
   static final shared = Notebooks();
@@ -9,7 +10,10 @@ class Notebooks with ChangeNotifier {
   // Entero que representa el tamaño de la lista
   int get length => _notebooks.length;
 
-  // Constructores
+  /*
+   * Constructores
+   */
+
   Notebooks();
   // Este constructor sirve para obtener una libreta llena de datos de prueba
   Notebooks.testDataBuilder() {
@@ -18,11 +22,18 @@ class Notebooks with ChangeNotifier {
         10, (index) => Notebook.testDataBuilder("Notebook $index")));
   }
 
-  // Accesores
+  /*
+   * Accesores
+   */
+
   // Sobrecargamos el metodo [] que devuelve un Notebook de un indice
   Notebook operator [](int index) {
     return _notebooks[index];
   }
+
+  /*
+   * Mutadores
+   */
 
   // Metodo para añadir Notebook
   void add(Notebook notebook) {
@@ -39,6 +50,7 @@ class Notebooks with ChangeNotifier {
     return isDeleted;
   }
 
+  // Metodo para eliminar Notebook por posicion
   Notebook removeAt(int index) {
     final Notebook nb = _notebooks.removeAt(index);
     // Avisamos de que se ha eliminado un Notebook
@@ -46,7 +58,10 @@ class Notebooks with ChangeNotifier {
     return nb;
   }
 
-  // Object Protocol
+  /*
+   * Object Protocol
+   */
+
   @override
   String toString() {
     return "<$runtimeType: $length notebook>";

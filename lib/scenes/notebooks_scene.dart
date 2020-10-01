@@ -1,15 +1,14 @@
 import 'package:everPobre/domain/notebooks.dart';
-import 'package:everPobre/scenes/notes_scene.dart';
+import 'package:everPobre/main.dart';
 import 'package:flutter/material.dart';
 
-// En el momento en el que esta clase tiene que estar a la escucha de cambios
-// hay que pasar el Stateless a Statefull, momento en el que se crea la una nueva clase con State
+// Una clase pasa de Stateless a Statefull cuando tiene que escuchar cambios
+// Estos cambios de estado los representa una nueva clase que extiende de State
 class NotebooksListView extends StatefulWidget {
-  final Notebooks _model;
+  final Notebooks _notebooks;
 
-  // Constructor
   // Cuando devuelves un const el sistema se asegura que solo haya una instancia de la clase
-  const NotebooksListView(Notebooks model) : _model = model;
+  const NotebooksListView(Notebooks notebooks) : _notebooks = notebooks;
 
   // Al pasar la clase a Statefull se crea este constructor de la clase con State
   @override
@@ -25,7 +24,7 @@ class _NotebooksListViewState extends State<NotebooksListView> {
   @override
   void didChangeDependencies() {
     // Damos de alta el widget como escuchador
-    widget._model.addListener(modelDidChange);
+    widget._notebooks.addListener(modelDidChange);
 
     super.didChangeDependencies();
   }
@@ -33,7 +32,7 @@ class _NotebooksListViewState extends State<NotebooksListView> {
   @override
   void dispose() {
     // Damos de baja el widget como escuchador
-    widget._model.removeListener(modelDidChange);
+    widget._notebooks.removeListener(modelDidChange);
 
     super.dispose();
   }
@@ -47,20 +46,20 @@ class _NotebooksListViewState extends State<NotebooksListView> {
      * itemCount es la altura de cada celda
      */
     return ListView.builder(
-        itemCount: widget._model.length,
+        itemCount: widget._notebooks.length,
         itemBuilder: (context, index) {
-          return NotebookSliver(widget._model, index);
+          return NotebooksSliver(widget._notebooks, index);
         });
   }
 }
 
 // Subvistas de algo scrolleable que forma las celdas
-class NotebookSliver extends StatefulWidget {
+class NotebooksSliver extends StatefulWidget {
   final Notebooks notebooks;
   final int index;
 
   // Constructor
-  const NotebookSliver(Notebooks notebooks, int index)
+  const NotebooksSliver(Notebooks notebooks, int index)
       : notebooks = notebooks,
         index = index;
 
@@ -68,12 +67,13 @@ class NotebookSliver extends StatefulWidget {
   _NotebookSliverState createState() => _NotebookSliverState();
 }
 
-class _NotebookSliverState extends State<NotebookSliver> {
+// El Sliver tiene que ver realmente con la celda y su contenido
+class _NotebookSliverState extends State<NotebooksSliver> {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       key: UniqueKey(),
-      // Permite arrastras una celda
+      // Permite arrastrar una celda
       onDismissed: (direction) {
         // Eliminamos el notebook del widget
         widget.notebooks.removeAt(widget.index);
@@ -83,6 +83,7 @@ class _NotebookSliverState extends State<NotebookSliver> {
           content: Text("Element ${widget.index}"),
         ));
 
+        // Avisar al modelo de que el notebook se ha eliminado
         setState(() {});
       },
       // Lo que se muestra mientras arrastras una celda que tiene onDismissed
@@ -91,16 +92,15 @@ class _NotebookSliverState extends State<NotebookSliver> {
       ),
       // Tarjeta con la info de la celda
       child: Card(
-          child: GestureDetector(
-              onTap: () {
-                print(widget.notebooks[widget.index]);
-                Navigator.pushNamed(context, NotesListView.routeName,
-                    arguments: widget.notebooks[widget.index]);
-              },
-              child: ListTile(
-                leading: const Icon(Icons.list),
-                title: Text(widget.notebooks[widget.index].body),
-              ))),
+          child: ListTile(
+        onTap: () {
+          print(widget.notebooks[widget.index]);
+          Navigator.pushNamed(context, NotesList.routeName,
+              arguments: widget.notebooks[widget.index]);
+        },
+        leading: const Icon(Icons.list),
+        title: Text(widget.notebooks[widget.index].body),
+      )),
     );
   }
 }

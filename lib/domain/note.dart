@@ -16,14 +16,20 @@ class Note {
   DateTime _modificationDate;
   DateTime get modificationDate => _modificationDate;
 
-  // Constructores
+  /*
+   * Constructores
+   */
+
   Note(String contents) : _body = contents {
     _creationDate = DateTime.now();
     _modificationDate = DateTime.now();
   }
   Note.empty() : this("");
 
-  // Object Protocol
+  /*
+   * Object Protocol
+   */
+
   @override
   String toString() {
     return "<$runtimeType: $body>";
