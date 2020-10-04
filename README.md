@@ -1,16 +1,9 @@
 # everPobre
 
-A new Flutter project.
+Hola Fernando:
+- No he conseguido que se me actualice la lista de notas con el cambio de body de la nota.
+- En el modelo de Note, en su setter he metido el notifyListeners(), ademas de pasar la clase a ChangeNotifiers
+- Pero se ve que avisa a la pantalla activa, que en ese momento es la de edicion del TextField
+- Cuando realmente yo quiero avisar a la que hay debajo.... en fin supongo que se me ha quedado algo flojo de conocimiento...
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Saludos.

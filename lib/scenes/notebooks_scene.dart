@@ -93,14 +93,12 @@ class _NotebookSliverState extends State<NotebooksSliver> {
       // Tarjeta con la info de la celda
       child: Card(
           child: ListTile(
-        onTap: () {
-          print(widget.notebooks[widget.index]);
-          Navigator.pushNamed(context, NotesList.routeName,
-              arguments: widget.notebooks[widget.index]);
-        },
-        leading: const Icon(Icons.list),
-        title: Text(widget.notebooks[widget.index].body),
-      )),
+              onTap: () {
+                Navigator.pushNamed(context, NotesList.routeName,
+                    arguments: widget.notebooks[widget.index]);
+              },
+              leading: const Icon(Icons.storage),
+              title: Text(widget.notebooks[widget.index].body))),
     );
   }
 }

@@ -1,14 +1,15 @@
 import 'package:everPobre/domain/notebook.dart';
+import 'package:everPobre/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 // Una clase pasa de Stateless a Statefull cuando tiene que escuchar cambios
 // Estos cambios de estado los representa una nueva clase que extiende de State
 class NotesListView extends StatefulWidget {
-  final Notebook _model;
+  final Notebook _notebook;
 
   // Cuando devuelves un const el sistema se asegura que solo haya una instancia de la clase
-  const NotesListView(Notebook model) : _model = model;
+  const NotesListView(Notebook notebook) : _notebook = notebook;
 
   // Al pasar la clase a Statefull se crea este constructor de la clase con State
   @override
@@ -24,7 +25,7 @@ class _NotesListViewState extends State<NotesListView> {
   @override
   void didChangeDependencies() {
     // Damos de alta el widget como escuchador
-    widget._model.addListener(modelDidChange);
+    widget._notebook.addListener(modelDidChange);
 
     super.didChangeDependencies();
   }
@@ -32,7 +33,7 @@ class _NotesListViewState extends State<NotesListView> {
   @override
   void dispose() {
     // Damos de baja el widget como escuchador
-    widget._model.removeListener(modelDidChange);
+    widget._notebook.removeListener(modelDidChange);
 
     super.dispose();
   }
@@ -46,9 +47,9 @@ class _NotesListViewState extends State<NotesListView> {
      * itemCount es la altura de cada celda
      */
     return ListView.builder(
-        itemCount: widget._model.length,
+        itemCount: widget._notebook.length,
         itemBuilder: (context, index) {
-          return NoteSliver(widget._model, index);
+          return NoteSliver(widget._notebook, index);
         });
   }
 }
@@ -60,8 +61,8 @@ class NoteSliver extends StatefulWidget {
 
   // Constructor
   const NoteSliver(Notebook notebook, int index)
-      : this.notebook = notebook,
-        this.index = index;
+      : notebook = notebook,
+        index = index;
 
   @override
   _NoteSliverState createState() => _NoteSliverState();
@@ -95,7 +96,11 @@ class _NoteSliverState extends State<NoteSliver> {
       // Tarjeta con la info de la celda
       child: Card(
           child: ListTile(
-              leading: const Icon(Icons.toc),
+              onTap: () {
+                Navigator.pushNamed(context, NoteEdition.routeName,
+                    arguments: widget.notebook[widget.index]);
+              },
+              leading: const Icon(Icons.format_list_bulleted),
               title: Text(widget.notebook[widget.index].body),
               subtitle: Text(
                   fmt.format(widget.notebook[widget.index].modificationDate)))),

@@ -1,6 +1,8 @@
 import 'package:everPobre/extensions/date_time.dart';
+import 'package:flutter/material.dart';
 
-class Note {
+// Para que el modelo avise de sus cambios se incluye "with ChangeNotifier"
+class Note with ChangeNotifier {
   // El body de la nota y su getter y setter
   String _body = "";
   String get body => _body;
@@ -8,6 +10,8 @@ class Note {
     _body = newValue;
     // Al darle un nuevo valor se considera que hay modificacion
     _modificationDate = DateTime.now();
+    // Avisamos a quien este escuchando
+    notifyListeners();
   }
 
   // Las fechas de una nota y sus getter
